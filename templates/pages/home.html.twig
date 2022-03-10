@@ -2,4 +2,30 @@
 
 {% block body %}
     <h1>Password Generator</h1>
+
+    <form>
+        <div>
+            <label for="length">Length</label>
+            <select id="length" >
+                {% for i in 8..60 %}
+                    <option value="{{ i }}" >{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="uppercase_letters">Uppercase Letters</label>
+            <input type="checkbox" id="uppercase_letters" />
+        </div>
+         <div>
+            <label for="numbers">Numbers</label>
+            <input type="checkbox" id="numbers" />
+        </div>
+         <div>
+            <label for="special_characterq">Special Characters</label>
+            <input type="checkbox" id="special_characterq" />
+        </div>
+        <div>
+            <button type="submit">Generate password</button>
+        </div>
+    </form>
 {% endblock %}
