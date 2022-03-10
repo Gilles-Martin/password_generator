@@ -8,7 +8,7 @@
             <label for="length">Length</label>
             <select id="length" >
                 {% for i in 8..60 %}
-                    <option value="{{ i }}" >{{ i }}</option>
+                    <option value="{{ i }}" {% if i == 12 %} selected {% endif %} >{{ i }}</option>
                 {% endfor %}
             </select>
         </div>
