@@ -67,5 +67,9 @@
             "allow-contrib": false,
             "require": "6.0.*"
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.4",
+        "squizlabs/php_codesniffer": "^3.6"
     }
 }
