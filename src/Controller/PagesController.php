@@ -18,7 +18,32 @@ class PagesController extends AbstractController
     #[Route('/generate-password', name : 'app_generate_password')]
     public function generatePassword(Request $request): Response
     {
-        dump($request->query->all());
-        return $this->render('pages/password.html.twig');
+        $length = $request->query->getInt('length');
+        $uppercaseLetters = $request->query->getBoolean('uppercase_letters');
+        $digits = $request->query->getBoolean('digits');
+        $specialCharaters = $request->query->getBoolean('special_characters');
+
+        $characters = range('a', 'z');
+        if ($uppercaseLetters) {
+            $characters = array_merge($characters, range('A', 'Z'));
+        }
+
+        if ($digits) {
+            $characters = array_merge($characters, range(0, 9));
+        }
+
+        if ($specialCharaters) {
+            $characters = array_merge($characters, str_split('!#$%&()+-*:;=?~'));
+        }
+
+        $password = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $characters[random_int(0, count($characters) - 1)];
+        }
+
+        return $this->render('pages/password.html.twig', [
+            'password' => $password
+        ]);
     }
 }
