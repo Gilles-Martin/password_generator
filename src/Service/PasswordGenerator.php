@@ -4,13 +4,12 @@ namespace App\Service;
 
 class PasswordGenerator
 {
-    public function generate($request): string
-    {
-        $length = $request->query->getInt('length');
-        $uppercaseLetters = $request->query->getBoolean('uppercase_letters');
-        $digits = $request->query->getBoolean('digits');
-        $specialCharaters = $request->query->getBoolean('special_characters');
-       
+    public function generate(
+        int $length,
+        bool $uppercaseLetters = false,
+        bool $digits = false,
+        bool $specialCharaters = false
+    ): string {
         $password = "";
 
         $characters = [];
@@ -22,12 +21,12 @@ class PasswordGenerator
 
         if ($digits) {
             $digits = range(0, 9);
-            $characters = array_merge($characters, $this->pickUpRandomCharacters($digits, $length, 10));
+            $characters = array_merge($characters, $this->pickUpRandomCharacters($digits, $length, 15));
         }
 
         if ($specialCharaters) {
             $specials = str_split('!#$%&()+-*:;=?~');
-            $characters = array_merge($characters, $this->pickUpRandomCharacters($specials, $length, 10));
+            $characters = array_merge($characters, $this->pickUpRandomCharacters($specials, $length, 15));
         }
 
         $lowerCaseLetters = range('a', 'z');
