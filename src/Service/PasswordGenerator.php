@@ -6,33 +6,36 @@ class PasswordGenerator
 {
     public function generate(
         int $length,
-        bool $uppercaseLetters = false,
+        bool $upperCaseLetters = false,
         bool $digits = false,
         bool $specialCharaters = false
     ): string {
         $password = "";
 
         $characters = [];
+        $upperCaseAlphabet = range('A', 'Z');
+        $digitsAlphabet = range(0, 9);
+        $specialCharatersAlphabet = str_split('!#$%&()+-*:;=?~');
+        $lowerCaseAlphabet = range('a', 'z');
 
-        if ($uppercaseLetters) {
-            $upperCase = range('A', 'Z');
-            $characters = array_merge($characters, $this->pickUpRandomCharacters($upperCase, $length, 30)) ;
+        $mapping = [
+            [$upperCaseLetters, $upperCaseAlphabet, 30],
+            [$digits, $digitsAlphabet, 15],
+            [$specialCharaters, $specialCharatersAlphabet, 15]
+        ];
+
+        foreach ($mapping as [$constraintEnabled, $constraintAlphabet, $pourcent]) {
+            if ($constraintEnabled) {
+                $characters = [
+                    ...$characters,
+                    ...$this->pickUpRandomCharacters($constraintAlphabet, $length, $pourcent)
+                ];
+            }
         }
 
-        if ($digits) {
-            $digits = range(0, 9);
-            $characters = array_merge($characters, $this->pickUpRandomCharacters($digits, $length, 15));
-        }
-
-        if ($specialCharaters) {
-            $specials = str_split('!#$%&()+-*:;=?~');
-            $characters = array_merge($characters, $this->pickUpRandomCharacters($specials, $length, 15));
-        }
-
-        $lowerCaseLetters = range('a', 'z');
         $missingLetters = $length - count($characters);
         for ($i = 0; $i < $missingLetters; $i++) {
-            $characters[] = $lowerCaseLetters[random_int(0, count($lowerCaseLetters) - 1)];
+            $characters[] = $lowerCaseAlphabet[random_int(0, count($lowerCaseAlphabet) - 1)];
         }
 
         $this->shuffle($characters);
