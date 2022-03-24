@@ -18,6 +18,7 @@ class PasswordGenerator
         $specialCharatersAlphabet = str_split('!#$%&()+-*:;=?~');
         $lowerCaseAlphabet = range('a', 'z');
 
+        // Vérification des conditions pour générer le mot de passe
         $mapping = [
             [$upperCaseLetters, $upperCaseAlphabet, 30],
             [$digits, $digitsAlphabet, 15],
@@ -26,22 +27,27 @@ class PasswordGenerator
 
         foreach ($mapping as [$constraintEnabled, $constraintAlphabet, $pourcent]) {
             if ($constraintEnabled) {
-                $characters = [
-                    ...$characters,
-                    ...$this->pickUpRandomCharacters($constraintAlphabet, $length, $pourcent)
-                ];
+                $characters[] = $this->pickUpRandomCharacters($constraintAlphabet, $length, $pourcent);
             }
         }
+
+        // Remettre $characters sur 1 niveau (Suppression du multilevel)
+        $characters = array_merge(...$characters);
 
         $missingLetters = $length - count($characters);
         for ($i = 0; $i < $missingLetters; $i++) {
             $characters[] = $lowerCaseAlphabet[random_int(0, count($lowerCaseAlphabet) - 1)];
         }
 
+        // Mélange des lettres
         $this->shuffle($characters);
+
         return implode($characters);
     }
 
+    /**
+     * Mélange d'un tableau valide pour la cryptographie
+     */
     private function shuffle(array &$arr): void
     {
         $arr = array_values($arr);
@@ -54,6 +60,9 @@ class PasswordGenerator
         }
     }
 
+    /**
+     * Sélection aléatoire de caractères  à partir d'un tableau et suivant le pourcentage. Min 1
+     */
     private function pickUpRandomCharacters($characters, $length, $percent = '10'): array
     {
         $randomCharacters = [];
